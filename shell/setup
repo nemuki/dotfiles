@@ -33,14 +33,6 @@ Install some software
 echo "Installing some software & library..."
 brew bundle -v --file=./dotfiles/Brewfile
 
-# パスワード等必要情報を入力
-touch ~/dotfiles/shell/state.txt
-source ~/dotfiles/shell/input/password
-
-source ~/dotfiles/shell/state.txt
-
-echo $PASSWORD | sudo -S spctl --master-disable >/dev/null 2>&1
-
 if [ ! -d ~/.config ]; then
     echo "Creating ~/.config directory..."
     mkdir ~/.config
