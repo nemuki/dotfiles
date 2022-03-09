@@ -46,14 +46,8 @@ if [ ! -d ~/.config ]; then
     mkdir ~/.config
 fi
 
-echo "zsh-autosuggestionsをインストール"
-sh ~/dotfiles/shell/zsh-autosuggestions
-
 echo "zshの設定を読み込む"
 source ~/.zshrc
-
-# echo "Carelyのセットアップ"
-# sh ~/dotfiles/shell/carely
 
 echo "シンボリックリンクを貼る"
 echo "Symlinking dotfiles..."
