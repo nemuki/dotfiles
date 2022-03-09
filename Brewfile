@@ -1,7 +1,6 @@
 tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/core"
-tap "microsoft/git"
 tap "uzimaru0000/tap"
 brew "anyenv"
 brew "arp-scan"
