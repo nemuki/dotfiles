@@ -29,7 +29,7 @@ else
     echo "dotfiles already cloned."
 fi
 
-Install some software
+# Install some software
 echo "Installing some software & library..."
 brew bundle -v --file=./dotfiles/Brewfile
 
