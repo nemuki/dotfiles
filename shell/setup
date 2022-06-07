@@ -14,8 +14,8 @@ fi
 # Clone my dotfiles
 if [ ! -d ~/dotfiles ]; then
     cd ~/.ssh
-    ssh-keygen
-    pbcopy <~/.ssh/id_rsa.pub
+    ssh-keygen -t ed25519
+    pbcopy < ~/.ssh/id_ed25519.pub
     echo "公開鍵をGitHubに登録しましたか？"
     select yn in "Yes"; do
         case $yn in
@@ -31,7 +31,17 @@ fi
 
 # Install some software
 echo "Installing some software & library..."
-brew bundle -v --file=./dotfiles/Brewfile
+brew bundle -v --file=~/dotfiles/Brewfile
+
+if [ ! -d ~/.zsh/completions]; then
+    echo "Creating ~/.zsh/completions directory..."
+    mkdir -p ~/.zsh/completions
+    wget -P ~/.zsh/completions https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
+    wget -O ~/.zsh/completions/_git https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh
+fi
+
+echo "Install fzf shell extensions"
+$(brew --prefix)/opt/fzf/install
 
 if [ ! -d ~/.config ]; then
     echo "Creating ~/.config directory..."

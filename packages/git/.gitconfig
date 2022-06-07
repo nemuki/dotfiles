@@ -6,8 +6,6 @@
 	defaultBranch = main
 [pull]
 	rebase = true
-[credential "https://dev.azure.com"]
-	useHttpPath = true
 [alias]
 	vacuum = "!f () { git checkout $1; git branch --merged|egrep -v '\\*|develop|main'|xargs git branch -d; git fetch --prune; };f"
 [gpg]
