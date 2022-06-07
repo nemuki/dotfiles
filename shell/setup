@@ -13,7 +13,6 @@ fi
 
 # Clone my dotfiles
 if [ ! -d ~/dotfiles ]; then
-    cd ~/.ssh
     ssh-keygen -t ed25519
     pbcopy < ~/.ssh/id_ed25519.pub
     echo "公開鍵をGitHubに登録しましたか？"
