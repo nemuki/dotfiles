@@ -1,7 +1,7 @@
 [user]
 	name = Naoki Takahashi
 	email = nemuki.nok@gmail.com
-	signingkey = 4BADF7A4238A2C67603B6B6D81FFC82A078D97FD
+	signingkey = 2C41A1E5F13D96EF8916499EDE8090BBB3C7A57B
 [init]
 	defaultBranch = main
 [pull]

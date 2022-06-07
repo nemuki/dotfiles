@@ -1,7 +1,7 @@
 # エディタ
 export EDITOR=nano
 
-Gitコマンドの補完
+# Gitコマンドの補完
 fpath=(~/.zsh/completion $fpath)
 
 # コマンドミスを修正
