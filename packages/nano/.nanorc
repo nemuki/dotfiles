@@ -1,0 +1,12 @@
+# https://www.nano-editor.org/dist/latest/nanorc.5.html
+
+# シンタックスハイライト
+include "/opt/homebrew/Cellar/nano/*/share/nano/*.nanorc"
+
+# 行番号表示
+set linenumbers
+
+# インデント系統
+set autoindent
+set tabsize 4
+set tabstospaces
