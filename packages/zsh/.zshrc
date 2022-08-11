@@ -10,12 +10,26 @@ setopt correct
 # 補完の選択を楽にする
 zstyle ':completion:*' menu select
 
+# 補完で大文字にもマッチ
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+
+# 直前と同じコマンドの場合はヒストリに追加しない
+setopt hist_ignore_dups
+
+# コマンド履歴件数
+HISTFILE=$HOME/.zsh_history
+HISTSIZE=100000
+SAVEHIST=1000000
+
 # brew
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # n
 export N_PREFIX=$HOME/.n
 export PATH=$N_PREFIX/bin:$PATH
+
+# 1Password
+export SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
 
 # alias
 alias ll="ls -l"
@@ -28,7 +42,7 @@ alias z="nano ~/.zshrc"
 alias s="source ~/.zshrc"
 
 # function
-m2g () {
+m2g() {
     ffmpeg -i $1 -r 10 ~/Desktop/output.gif
 }
 
@@ -36,7 +50,7 @@ m2g () {
 eval "$(starship init zsh)"
 
 # ghq peco
-peco-src () {
+peco-src() {
     local repo=$(ghq list | peco --query "$LBUFFER")
     if [ -n "$repo" ]; then
         repo=$(ghq list --full-path --exact $repo)
@@ -52,8 +66,7 @@ bindkey '^]' peco-src
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # brew
-if type brew &>/dev/null
-then
+if type brew &>/dev/null; then
     # brew completions
     FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
     FPATH="$(brew --prefix)/share/zsh-completions:${FPATH}"
@@ -61,7 +74,7 @@ then
     # zsh
     source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
     source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-    autoload -Uz compinit
-    compinit
 fi
+
+autoload -Uz compinit
+compinit
