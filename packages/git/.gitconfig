@@ -2,15 +2,15 @@
 	name = Naoki Takahashi
 	email = nemuki@users.noreply.github.com
 	signingkey = 2C41A1E5F13D96EF8916499EDE8090BBB3C7A57B
+[core]
+	autocrlf = input
+[commit]
+	gpgsign = true
+[gpg]
+	program = /opt/homebrew/bin/gpg
+[alias]
+	delete-marged-branch = "!f () { git branch --merged | egrep -v '\\*|develop|main|master|release' | xargs git branch -d; git fetch --prune; };f"
 [init]
 	defaultBranch = main
 [pull]
 	rebase = true
-[alias]
-	vacuum = "!f () { git checkout $1; git branch --merged|egrep -v '\\*|develop|main'|xargs git branch -d; git fetch --prune; };f"
-[gpg]
-	program = /opt/homebrew/bin/gpg
-[commit]
-	gpgsign = true
-[core]
-	autocrlf = input
