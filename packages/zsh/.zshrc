@@ -31,6 +31,9 @@ export PATH=$N_PREFIX/bin:$PATH
 # 1Password
 export SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
 
+# go
+export PATH="$HOME/go/bin:$PATH"
+
 # alias
 alias ll="ls -l"
 alias la="ls -la"
@@ -78,3 +81,7 @@ fi
 
 autoload -Uz compinit
 compinit
+
+# THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
