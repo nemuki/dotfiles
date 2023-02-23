@@ -1,3 +1,10 @@
 [directory]
 truncation_length = 100
 truncate_to_repo = false
+
+[aws]
+format = 'on [aws: ($profile, )($region)]($style),'
+force_display = true
+
+[time]
+disabled = false
