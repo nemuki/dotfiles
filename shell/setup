@@ -4,6 +4,9 @@ set -e
 
 cd "$HOME"
 
+# Change login shell
+chsh -s /bin/zsh
+
 # Install Homebrew
 if [ -e /opt/homebrew/bin/brew ] || [ -e /usr/local/bin/brew ]; then
     echo "Homebrew already installed."
