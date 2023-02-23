@@ -17,7 +17,7 @@ if [ ! -d "$HOME"/dotfiles ]; then
     echo "Clone dotfiles..."
     git clone https://github.com/nemuki/dotfiles.git
 else
-    printf "Dotfiles already cloned."
+    echo "Dotfiles already cloned."
 fi
 
 # Install some software
