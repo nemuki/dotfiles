@@ -44,3 +44,10 @@ cask "raycast"
 cask "slack"
 cask "visual-studio-code"
 cask "zoom"
+
+mas "1Password for Safari", id: 1569813296
+mas "BetterSnapTool", id: 417375580
+mas "Display Menu", id: 549083868
+mas "LINE", id: 539883307
+mas "RunCat", id: 1429033973
+mas "The Unarchiver", id: 425424353
