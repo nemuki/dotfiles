@@ -27,6 +27,7 @@ fi
 echo "Installing some software & library..."
 brew bundle -v --file=~/dotfiles/Brewfile
 
+# Download zsh completions file
 if [ ! -d ~/.zsh/completions ]; then
     echo "Creating ~/.zsh/completions directory..."
     mkdir -p ~/.zsh/completions
