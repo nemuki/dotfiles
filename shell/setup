@@ -5,45 +5,44 @@ set -e
 cd "$HOME"
 
 # Install Homebrew
-if [ ! -e /opt/homebrew/bin/brew ] && [ ! -e /usr/local/bin/brew ]; then
+if [ -e /opt/homebrew/bin/brew ] || [ -e /usr/local/bin/brew ]; then
+    echo "Homebrew already installed."
+else
     echo "Installing Homebrew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-else
-    echo "Homebrew already installed."
 fi
 
 # Clone my dotfiles
 if [ ! -d "$HOME"/dotfiles ]; then
-    echo "Clone dotfiles"
+    printf "\n Clone dotfiles"
     git clone https://github.com/nemuki/dotfiles.git
 else
-    echo "dotfiles repo already installed."
+    printf "\n Dotfiles already cloned."
 fi
 
 # Install some software
-echo "Installing some software & library..."
+printf "\n Installing some software & library..."
 brew bundle -v --file=~/dotfiles/Brewfile
 
 if [ ! -d ~/.zsh/completions ]; then
-    echo "Creating ~/.zsh/completions directory..."
+    printf "\n Creating ~/.zsh/completions directory..."
     mkdir -p ~/.zsh/completions
     wget -P ~/.zsh/completions https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
     wget -O ~/.zsh/completions/_git https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh
 fi
 
 if [ ! -d ~/.config ]; then
-    echo "Creating ~/.config directory..."
+    printf "\n Creating ~/.config directory..."
     mkdir ~/.config
 fi
 
-echo "zshの設定を読み込む"
+printf "\n Load zsh configuration..."
 . "$HOME/.zshrc"
 
-echo "シンボリックリンクを貼る"
-echo "Symlinking dotfiles..."
+printf "\n Symlinking dotfiles..."
 sh ~/dotfiles/shell/symlink
 
-echo "fzf shell extensions not installed, install command↓"
+printf "\n The fzf extension is not installed. To install, please enter the following."
 echo "$(brew --prefix)/opt/fzf/install"
 
-echo "done."
+printf "\n Done."
