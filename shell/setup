@@ -1,10 +1,11 @@
 #!/bin/sh
+
 set -e
 
-cd ~
+cd "$HOME"
 
 # Install Homebrew
-if [ ! -f /opt/homebrew/bin/brew ] || [ ! -f /usr/local/bin/brew ]; then
+if [ ! -e /opt/homebrew/bin/brew ] && [ ! -e /usr/local/bin/brew ]; then
     echo "Installing Homebrew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 else
@@ -12,35 +13,23 @@ else
 fi
 
 # Clone my dotfiles
-if [ ! -d ~/dotfiles ]; then
-    ssh-keygen -t ed25519
-    pbcopy < ~/.ssh/id_ed25519.pub
-    echo "公開鍵をGitHubに登録しましたか？"
-    select yn in "Yes"; do
-        case $yn in
-        Yes) break ;;
-        esac
-    done
-
-    echo "Cloning dotfiles..."
-    git clone git@github.com:nemuki/dotfiles.git
+if [ ! -d "$HOME"/dotfiles ]; then
+    echo "Clone dotfiles"
+    git clone https://github.com/nemuki/dotfiles.git
 else
-    echo "dotfiles already cloned."
+    echo "dotfiles repo already installed."
 fi
 
 # Install some software
 echo "Installing some software & library..."
 brew bundle -v --file=~/dotfiles/Brewfile
 
-if [ ! -d ~/.zsh/completions]; then
+if [ ! -d ~/.zsh/completions ]; then
     echo "Creating ~/.zsh/completions directory..."
     mkdir -p ~/.zsh/completions
     wget -P ~/.zsh/completions https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
     wget -O ~/.zsh/completions/_git https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh
 fi
-
-echo "Install fzf shell extensions"
-$(brew --prefix)/opt/fzf/install
 
 if [ ! -d ~/.config ]; then
     echo "Creating ~/.config directory..."
@@ -48,8 +37,13 @@ if [ ! -d ~/.config ]; then
 fi
 
 echo "zshの設定を読み込む"
-source ~/.zshrc
+. "$HOME/.zshrc"
 
 echo "シンボリックリンクを貼る"
 echo "Symlinking dotfiles..."
-sh ~/dotfiles/shell/symlink && echo "Done."
+sh ~/dotfiles/shell/symlink
+
+echo "fzf shell extensions not installed, install command↓"
+echo "$(brew --prefix)/opt/fzf/install"
+
+echo "done."
