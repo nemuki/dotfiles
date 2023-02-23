@@ -14,35 +14,35 @@ fi
 
 # Clone my dotfiles
 if [ ! -d "$HOME"/dotfiles ]; then
-    printf "\n Clone dotfiles"
+    echo "Clone dotfiles..."
     git clone https://github.com/nemuki/dotfiles.git
 else
-    printf "\n Dotfiles already cloned."
+    printf "Dotfiles already cloned."
 fi
 
 # Install some software
-printf "\n Installing some software & library..."
+echo "Installing some software & library..."
 brew bundle -v --file=~/dotfiles/Brewfile
 
 if [ ! -d ~/.zsh/completions ]; then
-    printf "\n Creating ~/.zsh/completions directory..."
+    echo "Creating ~/.zsh/completions directory..."
     mkdir -p ~/.zsh/completions
     wget -P ~/.zsh/completions https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
     wget -O ~/.zsh/completions/_git https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh
 fi
 
 if [ ! -d ~/.config ]; then
-    printf "\n Creating ~/.config directory..."
+    echo "Creating ~/.config directory..."
     mkdir ~/.config
 fi
 
-printf "\n Load zsh configuration..."
+echo "Load zsh configuration..."
 . "$HOME/.zshrc"
 
-printf "\n Symlinking dotfiles..."
+echo "Symlinking dotfiles..."
 sh ~/dotfiles/shell/symlink
 
-printf "\n The fzf extension is not installed. To install, please enter the following."
+echo "The fzf extension is not installed. To install, please enter the following."
 echo "$(brew --prefix)/opt/fzf/install"
 
-printf "\n Done."
+echo "Done."
