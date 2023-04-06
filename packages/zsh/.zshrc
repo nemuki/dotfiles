@@ -22,20 +22,48 @@ setopt hist_ignore_dups
 # 余分な空白は詰めて記録
 setopt hist_reduce_blanks
 
+# 他のシェルのヒストリをリアルタイムで共有する
+setopt share_history
+
 # コマンド履歴件数
 HISTFILE=$HOME/.zsh_history
-HISTSIZE=1000
-SAVEHIST=10000
+HISTSIZE=100000
+SAVEHIST=1000000
 
 # brew
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+# curl
+export PATH="$(brew --prefix)/opt/curl/bin:$PATH"
+
+# psql
+export PATH="$(brew --prefix)/opt/libpq/bin:$PATH"
+
+# coreutils
+export PATH="$(brew --prefix)/opt/coreutils/libexec/gnubin:$PATH"
+
 # go
 export PATH=${HOME}/go/bin:${PATH}
 
-# n
-export N_PREFIX=$HOME/.n
-export PATH=$N_PREFIX/bin:$PATH
+# volta
+export VOLTA_HOME="$HOME/.volta"
+export PATH="$VOLTA_HOME/bin:$PATH"
+
+# pnpm
+export PNPM_HOME="$HOME/Library/pnpm"
+export PATH="$PNPM_HOME:$PATH"
+
+# pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
+# jenv
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
+
+# bat
+export BAT_THEME="ansi"
 
 # 1Password
 export SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
@@ -75,21 +103,28 @@ base64-decode() {
     echo -n "$1" | base64 -D
 }
 awsp() {
+    local AWS_PROFILE
     if [ $# -ge 1 ]; then
         AWS_PROFILE="$1"
-        echo "Set AWS_PROFILE=$AWS_PROFILE."
     else
         AWS_PROFILE=$(sed -n "s/\]//g; s/\[profile //gp" ~/.aws/config | peco)
     fi
-    awsume $AWS_PROFILE -a
+
+    if [ -n "$AWS_PROFILE" ]; then
+        print -z "awsume ${AWS_PROFILE} -a"
+    fi
 }
 awscl() {
+    local AWS_PROFILE
     if [ $# -ge 1 ]; then
         AWS_PROFILE="$1"
     else
         AWS_PROFILE=$(sed -n "s/\]//g; s/\[profile //gp" ~/.aws/config | peco)
     fi
-    awsume $AWS_PROFILE -cl
+
+    if [ -n "$AWS_PROFILE" ]; then
+        awsume ${AWS_PROFILE} -cl
+    fi
 }
 peco-src() {
     local repo=$(ghq list | peco --query "$LBUFFER")
@@ -122,7 +157,3 @@ if type brew &>/dev/null; then
     autoload -Uz compinit
     compinit
 fi
-
-# THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
