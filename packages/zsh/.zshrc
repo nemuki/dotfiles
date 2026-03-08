@@ -1,3 +1,17 @@
+# brew
+if type brew &>/dev/null; then
+    # brew completions
+    FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+    FPATH="$(brew --prefix)/share/zsh-completions:${FPATH}"
+
+    # zsh
+    source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+    source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+    autoload -Uz compinit
+    compinit
+fi
+
 # エディタ
 export EDITOR=nano
 
@@ -36,28 +50,17 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 # curl
 export PATH="$(brew --prefix)/opt/curl/bin:$PATH"
 
-# psql
-export PATH="$(brew --prefix)/opt/libpq/bin:$PATH"
-
 # coreutils
 export PATH="$(brew --prefix)/opt/coreutils/libexec/gnubin:$PATH"
-
-# go
-export PATH=${HOME}/go/bin:${PATH}
-
-# volta
-export VOLTA_HOME="$HOME/.volta"
-export PATH="$VOLTA_HOME/bin:$PATH"
-
-# pnpm
-export PNPM_HOME="$HOME/Library/pnpm"
-export PATH="$PNPM_HOME:$PATH"
 
 # bat
 export BAT_THEME="ansi"
 
-# 1Password
-export SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
+# Postgres
+export PATH="$(brew --prefix)/opt/libpq/bin:$PATH"
+
+# GPG
+export GPG_TTY=$(tty)
 
 # alias
 alias ls="lsd"
@@ -74,6 +77,7 @@ alias s="source ~/.zshrc"
 alias c="code ."
 alias cz="code ~/.zshrc"
 alias dc="docker compose"
+alias jira="op run -- jira"
 
 # function
 m2g() {
@@ -133,21 +137,18 @@ bindkey '^]' peco-src
 eval "$(starship init zsh)"
 
 # fzf
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+eval "$(fzf --zsh)"
 
-# brew
-if type brew &>/dev/null; then
-    # brew completions
-    FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-    FPATH="$(brew --prefix)/share/zsh-completions:${FPATH}"
+# op
+# https://developer.1password.com/docs/cli/reference/commands/completion
+eval "$(op completion zsh)"; compdef _op op
 
-    # zsh
-    source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-    source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# Volta
+export VOLTA_HOME="$HOME/.volta"
+export PATH="$VOLTA_HOME/bin:$PATH"
 
-    autoload -Uz compinit
-    compinit
-fi
+# Credential
+export JIRA_API_TOKEN="op://Private/Jira Token/credential"
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+# Local
+export PATH="$HOME/.local/bin:$PATH"
