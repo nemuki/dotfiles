@@ -52,6 +52,7 @@
       ];
 
       flake = {
+        # darwin + home-manager（統合）
         darwinConfigurations."${username}" = nix-darwin.lib.darwinSystem {
           system = "aarch64-darwin";
           specialArgs = { inherit inputs username homedir; };
@@ -70,7 +71,63 @@
             }
           ];
         };
+
+        # darwin のみ（home-manager なし）
+        darwinConfigurations."${username}-system" = nix-darwin.lib.darwinSystem {
+          system = "aarch64-darwin";
+          specialArgs = { inherit inputs username homedir; };
+          modules = [
+            ./nix/darwin.nix
+            {
+              nixpkgs.config.allowUnfree = true;
+              nixpkgs.overlays = [ brew-nix.overlays.default ];
+            }
+          ];
+        };
+
+        # home-manager のみ
+        homeConfigurations."${username}" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages."aarch64-darwin";
+          extraSpecialArgs = { inherit username homedir; };
+          modules = [ ./nix/home.nix ];
+        };
       };
+
+      perSystem =
+        { pkgs, inputs', ... }:
+        {
+          apps = {
+            # home.nix のみ反映: nix run .#switch-home
+            switch-home = {
+              type = "app";
+              program = toString (
+                pkgs.writeShellScript "switch-home" ''
+                  exec ${inputs'.home-manager.packages.default}/bin/home-manager switch --flake "${self}#${username}" "$@"
+                ''
+              );
+            };
+
+            # darwin.nix のみ反映: nix run .#switch-darwin
+            switch-darwin = {
+              type = "app";
+              program = toString (
+                pkgs.writeShellScript "switch-darwin" ''
+                  exec sudo darwin-rebuild switch --flake "${self}#${username}-system" "$@"
+                ''
+              );
+            };
+
+            # darwin + home-manager 統合反映: nix run .#switch
+            switch = {
+              type = "app";
+              program = toString (
+                pkgs.writeShellScript "switch" ''
+                  exec sudo darwin-rebuild switch --flake "${self}#${username}" "$@"
+                ''
+              );
+            };
+          };
+        };
     };
 }
 
