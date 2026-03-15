@@ -59,9 +59,20 @@
       mru-spaces = false; # 最近使ったスペースを表示しない
       mineffect = "scale"; # ウィンドウを開くときのアニメーション
       minimize-to-application = true; # ウィンドウをアプリケーションアイコンに格納
-      persistent-others = [ # 最近使ったアプリを表示するスペース
-        { folder = { path = "/Users/${username}/Desktop"; showas = "fan"; }; }
-        { folder = { path = "/Users/${username}/Downloads"; showas = "fan"; }; }
+      persistent-others = [
+        # 最近使ったアプリを表示するスペース
+        {
+          folder = {
+            path = "/Users/${username}/Desktop";
+            showas = "fan";
+          };
+        }
+        {
+          folder = {
+            path = "/Users/${username}/Downloads";
+            showas = "fan";
+          };
+        }
       ];
       wvous-bl-corner = 11; # 左下のホットコーナーを「Launchpad」に設定
       wvous-tr-corner = 12; # 右上のホットコーナーを「通知センター」に設定
