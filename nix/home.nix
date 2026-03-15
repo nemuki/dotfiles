@@ -171,16 +171,13 @@
   # --------------------------------------------------------------------------
   # Nano  (.nanorc 相当)
   # --------------------------------------------------------------------------
-  programs.nano = {
-    enable = true;
-    nanorc = ''
-      include "${pkgs.nano}/share/nano/*.nanorc"
-      set linenumbers
-      set autoindent
-      set tabsize 4
-      set tabstospaces
-    '';
-  };
+  home.file.".nanorc".text = ''
+    include "${pkgs.nano}/share/nano/*.nanorc"
+    set linenumbers
+    set autoindent
+    set tabsize 4
+    set tabstospaces
+  '';
 
   # --------------------------------------------------------------------------
   # bat
