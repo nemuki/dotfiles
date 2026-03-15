@@ -1,5 +1,5 @@
 {
-  lib,
+  config,
   pkgs,
   username,
   homedir,
@@ -10,6 +10,16 @@
     inherit username;
     homeDirectory = homedir;
     stateVersion = "25.11";
+
+    sessionVariables = {
+      EDITOR = "nano";
+    };
+  };
+
+  # XDG Base Directory
+  xdg = {
+    enable = true;
+    configHome = "${homedir}/.config";
   };
 
   # Packages
@@ -71,17 +81,23 @@
   # Zsh  (.zshrc 相当)
   programs.zsh = {
     enable = true;
+    dotDir = "${config.xdg.configHome}/zsh";
     enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
 
     history = {
-      path = "${homedir}/.zsh_history";
+      path = "${config.xdg.configHome}/zsh/.zsh_history";
       size = 100000;
       save = 1000000;
       ignoreDups = true;
       share = true;
     };
+
+    setOptions = [
+      "correct"
+      "hist_reduce_blanks"
+    ];
 
     shellAliases = {
       ls = "lsd";
@@ -101,27 +117,16 @@
       jira = "op run -- jira";
     };
 
-    initContent = lib.mkMerge [
-      ''
-        # エディタ
-        export EDITOR=nano
+    initContent = ''
+      # 補完の選択を楽にする
+      zstyle ':completion:*' menu select
 
-        # コマンドミスを修正
-        setopt correct
+      # 補完で大文字にもマッチ
+      zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
-        # 余分な空白は詰めて記録
-        setopt hist_reduce_blanks
-
-        # 補完の選択を楽にする
-        zstyle ':completion:*' menu select
-
-        # 補完で大文字にもマッチ
-        zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-
-        # GPG
-        export GPG_TTY=$(tty)
-      ''
-    ];
+      # GPG
+      export GPG_TTY=$(tty)
+    '';
   };
 
   # Starship
@@ -141,7 +146,7 @@
   };
 
   # Nano
-  home.file.".nanorc".text = ''
+  xdg.configFile."nano/nanorc".text = ''
     include "${pkgs.nano}/share/nano/*.nanorc"
     set linenumbers
     set autoindent
