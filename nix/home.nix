@@ -48,6 +48,7 @@
     pinentry_mac
     jira-cli-go
     openssh
+    nixfmt
   ];
 
   # Git
