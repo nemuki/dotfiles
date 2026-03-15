@@ -33,18 +33,14 @@
     ghq
     gnupg
     grpcurl
-    htop
     jq
     lsd
     mkcert
     nano
     peco
-    pipx
-    stow
     tree
     uv
     vim
-    volta
     wget
     starship
     libpq
