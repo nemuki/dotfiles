@@ -47,6 +47,10 @@
     volta
     wget
     starship
+    libpq
+    pinact
+    pinentry_mac
+    jira-cli-go
   ];
 
   # Git

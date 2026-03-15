@@ -30,17 +30,8 @@
       autoUpdate = false;
       cleanup = "zap"; # Brewfile 外のパッケージを削除
     };
-    taps = [
-      "ankitpokhrel/jira-cli"
-    ];
     brews = [
-      "openssl@3"
-      "icu4c@76"
-      "jira-cli"
-      "libpq"
       "mas"
-      "pinact"
-      "pinentry-mac"
     ];
     casks = [
       "1password-cli"
