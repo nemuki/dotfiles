@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   username,
   homedir,
@@ -8,7 +9,7 @@
   home = {
     inherit username;
     homeDirectory = homedir;
-    stateVersion = "24.11";
+    stateVersion = "25.11";
   };
 
   # --------------------------------------------------------------------------
@@ -37,6 +38,7 @@
     vim
     volta
     wget
+    starship
   ];
 
   # --------------------------------------------------------------------------
@@ -44,22 +46,23 @@
   # --------------------------------------------------------------------------
   programs.git = {
     enable = true;
-    userName = "Naoki Takahashi";
-    userEmail = "43571743+nemuki@users.noreply.github.com";
 
     signing = {
       key = "2C41A1E5F13D96EF8916499EDE8090BBB3C7A57B";
       signByDefault = true;
     };
 
-    aliases = {
-      delete-marged-branch = "!f () { git branch --merged | egrep -v '\\*|develop|main|master|release' | xargs git branch -d; git fetch --prune; };f";
-      pushf = "push --force-with-lease --force-if-includes";
-      swc = "switch --create";
-      sw = "switch";
-    };
-
-    extraConfig = {
+    settings = {
+      user = {
+        name = "Naoki Takahashi";
+        email = "43571743+nemuki@users.noreply.github.com";
+      };
+      alias = {
+        delete-marged-branch = "!f () { git branch --merged | egrep -v '\\*|develop|main|master|release' | xargs git branch -d; git fetch --prune; };f";
+        pushf = "push --force-with-lease --force-if-includes";
+        swc = "switch --create";
+        sw = "switch";
+      };
       core.autocrlf = "input";
       commit.gpgsign = true;
       gpg.program = "/opt/homebrew/bin/gpg";
@@ -104,50 +107,27 @@
       jira = "op run -- jira";
     };
 
-    # compinit より前に実行（fpath を補完前にセット）
-    initExtraBeforeCompInit = ''
-      if type brew &>/dev/null; then
-        FPATH="$(brew --prefix)/share/zsh/site-functions:''${FPATH}"
-        FPATH="$(brew --prefix)/share/zsh-completions:''${FPATH}"
-      fi
+    initContent = lib.mkMerge [
+      ''
+        # エディタ
+        export EDITOR=nano
 
-      # カスタム補完ディレクトリ
-      fpath=(~/.zsh/completion $fpath)
-    '';
+        # コマンドミスを修正
+        setopt correct
 
-    # .zprofile: brew の環境変数をログインシェル時にセット
-    profileExtra = ''
-      eval "$(/opt/homebrew/bin/brew shellenv)"
-    '';
+        # 余分な空白は詰めて記録
+        setopt hist_reduce_blanks
 
-    initExtra = ''
-      # エディタ
-      export EDITOR=nano
+        # 補完の選択を楽にする
+        zstyle ':completion:*' menu select
 
-      # コマンドミスを修正
-      setopt correct
+        # 補完で大文字にもマッチ
+        zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
-      # 余分な空白は詰めて記録
-      setopt hist_reduce_blanks
-
-      # 補完の選択を楽にする
-      zstyle ':completion:*' menu select
-
-      # 補完で大文字にもマッチ
-      zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-
-      # curl
-      export PATH="$(brew --prefix)/opt/curl/bin:''${PATH}"
-
-      # coreutils
-      export PATH="$(brew --prefix)/opt/coreutils/libexec/gnubin:''${PATH}"
-
-      # Postgres (libpq)
-      export PATH="$(brew --prefix)/opt/libpq/bin:''${PATH}"
-
-      # GPG
-      export GPG_TTY=$(tty)
-    '';
+        # GPG
+        export GPG_TTY=$(tty)
+      ''
+    ];
   };
 
   # --------------------------------------------------------------------------

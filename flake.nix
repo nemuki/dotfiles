@@ -43,7 +43,6 @@
     }:
     let
       username = "nem";
-      hostname = "NaokinoMacBook-Pro";
       homedir = "/Users/${username}";
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
@@ -53,7 +52,7 @@
       ];
 
       flake = {
-        darwinConfigurations."${hostname}" = nix-darwin.lib.darwinSystem {
+        darwinConfigurations."${username}" = nix-darwin.lib.darwinSystem {
           system = "aarch64-darwin";
           specialArgs = { inherit inputs username homedir; };
           modules = [
