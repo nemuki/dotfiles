@@ -47,6 +47,7 @@
     pinact
     pinentry_mac
     jira-cli-go
+    openssh
   ];
 
   # Git
@@ -54,7 +55,7 @@
     enable = true;
 
     signing = {
-      key = "2C41A1E5F13D96EF8916499EDE8090BBB3C7A57B";
+      key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKylmdpY+HATtBHZpGfG05KZe7T05MOt49Oj9PR612IE";
       signByDefault = true;
     };
 
@@ -71,7 +72,12 @@
       };
       core.autocrlf = "input";
       commit.gpgsign = true;
-      gpg.program = "${pkgs.gnupg}/bin/gpg";
+      gpg = {
+        format = "ssh";
+        ssh = {
+          program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
+        };
+      };
       init.defaultBranch = "main";
       pull.rebase = true;
       push.autoSetupRemote = true;
@@ -158,6 +164,17 @@
   programs.bat = {
     enable = true;
     config.theme = "ansi";
+  };
+
+  programs.ssh = {
+    enable = true;
+    enableDefaultConfig = false;
+
+    matchBlocks = {
+      "*" = {
+        identityAgent = "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
+      };
+    };
   };
 
   programs.home-manager.enable = true;

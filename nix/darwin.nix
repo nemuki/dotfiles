@@ -34,6 +34,7 @@
       "mas"
     ];
     casks = [
+      "1password"
       "1password-cli"
       "claude-code"
       "font-cica"
@@ -44,6 +45,7 @@
       "karabiner-elements"
       "keyboardcleantool"
       "raycast"
+      "google-chrome"
       "visual-studio-code"
     ];
   };
