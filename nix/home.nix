@@ -103,6 +103,7 @@
     setOptions = [
       "correct"
       "hist_reduce_blanks"
+      "share_history"
     ];
 
     shellAliases = {
@@ -130,8 +131,18 @@
       # 補完で大文字にもマッチ
       zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
-      # GPG
-      export GPG_TTY=$(tty)
+      # peco-src: ghq + peco でリポジトリに移動
+      peco-src() {
+          local repo=$(ghq list | peco --query "$LBUFFER")
+          if [ -n "$repo" ]; then
+              repo=$(ghq list --full-path --exact $repo)
+              BUFFER="cd ''${repo}"
+              zle accept-line
+          fi
+          zle clear-screen
+      }
+      zle -N peco-src
+      bindkey '^]' peco-src
     '';
   };
 
@@ -164,6 +175,12 @@
   programs.bat = {
     enable = true;
     config.theme = "ansi";
+  };
+
+  # fzf
+  programs.fzf = {
+    enable = true;
+    enableZshIntegration = true;
   };
 
   programs.ssh = {
