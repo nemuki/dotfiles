@@ -5,9 +5,7 @@
   ...
 }:
 {
-  # --------------------------------------------------------------------------
   # Nix settings
-  # --------------------------------------------------------------------------
   nix.settings = {
     experimental-features = [
       "nix-command"
@@ -19,16 +17,12 @@
     ];
   };
 
-  # --------------------------------------------------------------------------
   # System packages
-  # --------------------------------------------------------------------------
   environment.systemPackages = with pkgs; [
     git
   ];
 
-  # --------------------------------------------------------------------------
   # Homebrew (casks / macOS-specific formulas)
-  # --------------------------------------------------------------------------
   homebrew = {
     enable = true;
     onActivation = {
@@ -62,9 +56,7 @@
     ];
   };
 
-  # --------------------------------------------------------------------------
   # macOS system defaults
-  # --------------------------------------------------------------------------
   system.defaults = {
     dock = {
       autohide = true;
@@ -81,21 +73,21 @@
 
     NSGlobalDomain = {
       AppleInterfaceStyle = "Dark";
-      AppleKeyboardUIMode = 3; # フルキーボードアクセス
+      # フルキーボードアクセス
+      AppleKeyboardUIMode = 3;
       InitialKeyRepeat = 15;
       KeyRepeat = 2;
       _HIHideMenuBar = false;
     };
 
     trackpad = {
-      Clicking = true; # タップでクリック
+      # タップでクリック
+      Clicking = true;
       TrackpadThreeFingerDrag = true;
     };
   };
 
-  # --------------------------------------------------------------------------
   # Shell / Users
-  # --------------------------------------------------------------------------
   programs.zsh.enable = true;
 
   users.users.${username} = {
