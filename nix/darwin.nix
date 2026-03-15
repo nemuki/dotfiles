@@ -81,8 +81,9 @@
     finder = {
       AppleShowAllExtensions = true; # 拡張子を常に表示
       ShowPathbar = true;
-      ShowStatusBar = true;
-      FXPreferredViewStyle = "Nlsv"; # リスト表示をデフォルトにする
+      ShowStatusBar = false;
+      FXPreferredViewStyle = "clmv"; # リスト表示をデフォルトにする
+      NewWindowTarget = "Home"; # 新しい Finder ウィンドウをホームディレクトリにする
     };
 
     NSGlobalDomain = {
@@ -95,6 +96,11 @@
     trackpad = {
       Clicking = true; # タップでクリック
       TrackpadRightClick = true; # 2本指で右クリック
+    };
+
+    screencapture = {
+      disable-shadow = true; # スクリーンショットの影を消す
+      type = "png"; # スクリーンショットのファイル形式
     };
   };
 
