@@ -65,7 +65,7 @@
       };
       core.autocrlf = "input";
       commit.gpgsign = true;
-      gpg.program = "/opt/homebrew/bin/gpg";
+      gpg.program = "${pkgs.gnupg}/bin/gpg";
       init.defaultBranch = "main";
       pull.rebase = true;
       push.autoSetupRemote = true;
