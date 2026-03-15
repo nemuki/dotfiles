@@ -1,3 +1,4 @@
+# https://nix-darwin.github.io/nix-darwin/manual/index.html
 {
   pkgs,
   username,
@@ -59,31 +60,39 @@
   # macOS system defaults
   system.defaults = {
     dock = {
-      autohide = true;
-      show-recents = false;
-      mru-spaces = false;
+      autohide = false;
+      tilesize = 40; # アイコンサイズ
+      show-recents = false; # 最近使ったアプリを表示しない
+      mru-spaces = false; # 最近使ったスペースを表示しない
+      mineffect = "scale"; # ウィンドウを開くときのアニメーション
+      minimize-to-application = true; # ウィンドウをアプリケーションアイコンに格納
+      persistent-others = [ # 最近使ったアプリを表示するスペース
+        { folder = "/Users/${username}/Desktop"; }
+        { folder = "/Users/${username}/Downloads"; }
+      ];
+      static-only = true; # 開いているアプリのみを表示
+      wvous-bl-corner = 11; # 左下のホットコーナーを「Launchpad」に設定
+      wvous-tr-corner = 12; # 右上のホットコーナーを「通知センター」に設定
     };
 
+    # Finder 設定
     finder = {
-      AppleShowAllExtensions = true;
-      FXEnableExtensionChangeWarning = false;
+      AppleShowAllExtensions = true; # 拡張子を常に表示
       ShowPathbar = true;
       ShowStatusBar = true;
+      FXPreferredViewStyle = "Nlsv"; # リスト表示をデフォルトにする
     };
 
     NSGlobalDomain = {
-      AppleInterfaceStyle = "Dark";
-      # フルキーボードアクセス
-      AppleKeyboardUIMode = 3;
-      InitialKeyRepeat = 15;
-      KeyRepeat = 2;
-      _HIHideMenuBar = false;
+      AppleInterfaceStyleSwitchesAutomatically = true; # ダークモードを自動で切り替える
+      InitialKeyRepeat = 15; # キーリピートの初期遅延を短くする
+      KeyRepeat = 2; # キーリピートの速度を速くする
+      _HIHideMenuBar = false; # メニューバーを常に表示
     };
 
     trackpad = {
-      # タップでクリック
-      Clicking = true;
-      TrackpadThreeFingerDrag = true;
+      Clicking = true; # タップでクリック
+      TrackpadRightClick = true; # 2本指で右クリック
     };
   };
 
