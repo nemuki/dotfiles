@@ -35,7 +35,6 @@
     ];
     casks = [
       "1password"
-      "1password-cli"
       "claude-code"
       "font-cica"
       "font-hackgen"

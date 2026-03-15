@@ -24,6 +24,7 @@
 
   # Packages
   home.packages = with pkgs; [
+    _1password-cli
     bat
     coreutils
     fd
@@ -31,7 +32,6 @@
     fzf
     gh
     ghq
-    gnupg
     grpcurl
     jq
     lsd
@@ -45,7 +45,6 @@
     starship
     libpq
     pinact
-    pinentry_mac
     jira-cli-go
     openssh
     nixfmt
