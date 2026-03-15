@@ -1,5 +1,5 @@
 {
-  description = "nem's home-manager configuration"
+  description = "nem's home-manager configuration";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
@@ -29,9 +29,9 @@
       url = "github:BatteredBunny/brew-api";
       flake = false;
     };
-  }
+  };
 
-  outputs = 
+  outputs =
     inputs@{
       self,
       flake-parts,
@@ -43,29 +43,35 @@
     }:
     let
       username = "nem";
+      hostname = "NaokinoMacBook-Pro";
       homedir = "/Users/${username}";
+    in
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [
+        "aarch64-darwin"
+        "x86_64-darwin"
+      ];
 
-      # Create pkgs with overlays
-      mkPkgs =
-        system:
-        let
-          isDarwin = builtins.match ".*-darwin" system != null;
-        in
-        import nixpkgs {
-          inherit system;
-          config.allowUnfree = true;
-          # overlays = [
-          #   llm-agents.overlays.default
-          #   (_final: _prev: {
-          #     _claude-code-overlay = claude-code-overlay;
-          #   })
-          #   gh-nippou.overlays.default
-          #   gh-graph.overlays.default
-          #   (import ./nix/overlays/default.nix)
-          # ]
-          ++ nixpkgs.lib.optionals isDarwin [
-            brew-nix.overlays.default
+      flake = {
+        darwinConfigurations."${hostname}" = nix-darwin.lib.darwinSystem {
+          system = "aarch64-darwin";
+          specialArgs = { inherit inputs username homedir; };
+          modules = [
+            ./nix/darwin.nix
+            home-manager.darwinModules.home-manager
+            {
+              nixpkgs.config.allowUnfree = true;
+              nixpkgs.overlays = [ brew-nix.overlays.default ];
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                extraSpecialArgs = { inherit username homedir; };
+                users.${username} = import ./nix/home.nix;
+              };
+            }
           ];
         };
+      };
+    };
 }
 
