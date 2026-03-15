@@ -130,6 +130,7 @@
       "Microsoft Excel" = 462058435;
       "Slack" = 803453959;
       "The Unarchiver" = 425424353;
+      "RunCat" = 1429033973;
     };
   };
 }
