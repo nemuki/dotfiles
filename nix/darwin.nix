@@ -58,10 +58,9 @@
       mineffect = "scale"; # ウィンドウを開くときのアニメーション
       minimize-to-application = true; # ウィンドウをアプリケーションアイコンに格納
       persistent-others = [ # 最近使ったアプリを表示するスペース
-        { folder = "/Users/${username}/Desktop"; }
-        { folder = "/Users/${username}/Downloads"; }
+        { folder = { path = "/Users/${username}/Desktop"; showas = "fan"; }; }
+        { folder = { path = "/Users/${username}/Downloads"; showas = "fan"; }; }
       ];
-      static-only = true; # 開いているアプリのみを表示
       wvous-bl-corner = 11; # 左下のホットコーナーを「Launchpad」に設定
       wvous-tr-corner = 12; # 右上のホットコーナーを「通知センター」に設定
     };
