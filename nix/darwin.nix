@@ -26,13 +26,16 @@
   # Homebrew (casks / macOS-specific formulas)
   homebrew = {
     enable = true;
+
     onActivation = {
       autoUpdate = false;
       cleanup = "zap"; # Brewfile 外のパッケージを削除
     };
+
     brews = [
       "mas"
     ];
+
     casks = [
       "1password"
       "claude-code"
@@ -47,6 +50,12 @@
       "google-chrome"
       "visual-studio-code"
     ];
+
+    masApps = {
+      "Microsoft Excel" = 462058435;
+      "Slack" = 803453959;
+      "The Unarchiver" = 425424353;
+    };
   };
 
   # macOS system defaults
@@ -102,6 +111,8 @@
       disable-shadow = true; # スクリーンショットの影を消す
       type = "png"; # スクリーンショットのファイル形式
     };
+
+    menuExtraClock.ShowSeconds = true; # メニューバーの時計に秒を表示
   };
 
   # Shell / Users
