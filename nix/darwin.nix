@@ -76,6 +76,7 @@
         InitialKeyRepeat = 15; # キーリピートの初期遅延を短くする
         KeyRepeat = 2; # キーリピートの速度を速くする
         _HIHideMenuBar = false; # メニューバーを常に表示
+        "com.apple.keyboard.fnState" = true; # F1-F12 をファンクションキーとして使用（メディアキーではなく）
       };
 
       trackpad = {
