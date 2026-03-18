@@ -48,6 +48,7 @@
     jira-cli-go
     openssh
     nixfmt
+    p7zip
   ];
 
   # Git
@@ -130,6 +131,25 @@
 
       # 補完で大文字にもマッチ
       zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+
+      function zipwin () {
+        if [ -z $1 ] || [ $1 = . ]; then
+          # 現在の作業ディレクトリをZIPファイルに圧縮する．
+          local zip_name="$(basename $(pwd)).zip"
+          fd --type file --strip-cwd-prefix . -X 7z a -tzip -scsWIN $zip_name {}
+        else
+          # 指定したディレクトリをZIPファイルに圧縮する．
+          local loc_dir=$(dirname $1)
+          local target=$(basename $1)
+          local zip_name="$(pwd)/''${target}.zip"
+          fd --type file --base-directory=$loc_dir . $target -X 7z a -tzip -scsWIN $zip_name {}
+        fi
+
+        # 作成したZIPファイルに含まれるファイルを確認する．不要であればコメントアウトしてください．
+        7z l $zip_name
+
+        return 0
+      }
 
       # peco-src: ghq + peco でリポジトリに移動
       peco-src() {
