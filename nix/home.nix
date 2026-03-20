@@ -49,6 +49,7 @@
     openssh
     nixfmt
     p7zip
+    pnpm_9
   ];
 
   # Git
