@@ -51,6 +51,7 @@
     p7zip
     pnpm_9
     zellij
+    claude-code
   ];
 
   # Git

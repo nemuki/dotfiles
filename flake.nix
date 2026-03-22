@@ -29,6 +29,8 @@
       url = "github:BatteredBunny/brew-api";
       flake = false;
     };
+
+    claude-code-overlay.url = "github:ryoppippi/claude-code-overlay";
   };
 
   outputs =
@@ -61,7 +63,10 @@
             home-manager.darwinModules.home-manager
             {
               nixpkgs.config.allowUnfree = true;
-              nixpkgs.overlays = [ brew-nix.overlays.default ];
+              nixpkgs.overlays = [
+                brew-nix.overlays.default
+                inputs.claude-code-overlay.overlays.default
+              ];
               home-manager = {
                 useGlobalPkgs = true;
                 useUserPackages = true;
@@ -80,7 +85,10 @@
             ./nix/darwin.nix
             {
               nixpkgs.config.allowUnfree = true;
-              nixpkgs.overlays = [ brew-nix.overlays.default ];
+              nixpkgs.overlays = [
+                brew-nix.overlays.default
+                inputs.claude-code-overlay.overlays.default
+              ];
             }
           ];
         };
