@@ -113,7 +113,6 @@
 
     casks = [
       "1password"
-      "claude-code"
       "docker-desktop"
       "font-cica"
       "font-hackgen"
