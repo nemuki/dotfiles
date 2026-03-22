@@ -50,6 +50,7 @@
     nixfmt
     p7zip
     pnpm_9
+    zellij
   ];
 
   # Git
