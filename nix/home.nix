@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   username,
   homedir,
@@ -85,8 +86,8 @@
         com = "commit -m";
       };
       core.autocrlf = "input";
-      commit.gpgsign = true;
-      gpg = {
+      commit.gpgsign = lib.mkIf pkgs.stdenv.isDarwin true;
+      gpg = lib.mkIf pkgs.stdenv.isDarwin {
         format = "ssh";
         ssh = {
           program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
@@ -95,8 +96,27 @@
       init.defaultBranch = "main";
       pull.rebase = true;
       push.autoSetupRemote = true;
+      "credential \"https://github.com\"" = {
+        helper = "!${pkgs.gh}/bin/gh auth git-credential";
+      };
+      "credential \"https://gist.github.com\"" = {
+        helper = "!${pkgs.gh}/bin/gh auth git-credential";
+      };
     };
   };
+
+  # Ubuntu の場合にzshをデフォルトシェルに設定
+  home.activation.setDefaultShell = lib.mkIf pkgs.stdenv.isLinux (
+    lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      if ! grep -qF "${pkgs.zsh}/bin/zsh" /etc/shells; then
+        echo "${pkgs.zsh}/bin/zsh" | $DRY_RUN_CMD /usr/bin/sudo /usr/bin/tee -a /etc/shells > /dev/null
+      fi
+      if [ "$(/usr/bin/getent passwd ${username} | cut -d: -f7)" != "${pkgs.zsh}/bin/zsh" ]; then
+        $DRY_RUN_CMD /usr/bin/chsh -s ${pkgs.zsh}/bin/zsh ${username}
+      fi
+    ''
+  );
+
   # Zsh  (.zshrc 相当)
   programs.zsh = {
     enable = true;
@@ -219,7 +239,7 @@
     enableZshIntegration = true;
   };
 
-  programs.ssh = {
+  programs.ssh = lib.mkIf pkgs.stdenv.isDarwin {
     enable = true;
     enableDefaultConfig = false;
 
