@@ -51,6 +51,7 @@
       systems = [
         "aarch64-darwin"
         "x86_64-darwin"
+        "x86_64-linux"
       ];
 
       flake = {
@@ -93,11 +94,31 @@
           ];
         };
 
-        # home-manager のみ
+        # home-manager のみ (macOS)
         homeConfigurations."${username}" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages."aarch64-darwin";
           extraSpecialArgs = { inherit username homedir; };
-          modules = [ ./nix/home.nix ];
+          modules = [ ./nix/home.nix
+            {
+              nixpkgs.config.allowUnfree = true;
+              nixpkgs.overlays = [
+                inputs.claude-code-overlay.overlays.default
+              ];
+            }
+          ];
+        };
+
+        # home-manager のみ (WSL Ubuntu / Linux)
+        homeConfigurations."${username}-linux" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages."x86_64-linux";
+          extraSpecialArgs = { inherit username; homedir = "/home/${username}"; };
+          modules = [ ./nix/home.nix 
+            {
+              nixpkgs.config.allowUnfree = true;
+              nixpkgs.overlays = [
+                inputs.claude-code-overlay.overlays.default
+              ];
+            }];
         };
       };
 
@@ -105,12 +126,22 @@
         { pkgs, inputs', ... }:
         {
           apps = {
-            # home.nix のみ反映: nix run .#switch-home
+            # home.nix のみ反映 (macOS): nix run .#switch-home
             switch-home = {
               type = "app";
               program = toString (
                 pkgs.writeShellScript "switch-home" ''
                   exec ${inputs'.home-manager.packages.default}/bin/home-manager switch --flake "${self}#${username}" "$@"
+                ''
+              );
+            };
+
+            # home.nix のみ反映 (Linux): nix run .#switch-home-linux
+            switch-home-linux = {
+              type = "app";
+              program = toString (
+                pkgs.writeShellScript "switch-home-linux" ''
+                  exec ${inputs'.home-manager.packages.default}/bin/home-manager switch --flake "${self}#${username}-linux" "$@"
                 ''
               );
             };
