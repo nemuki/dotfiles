@@ -58,6 +58,10 @@
   programs.git = {
     enable = true;
 
+    ignores = [
+      ".claude/settings.local.json"
+    ];
+
     signing = {
       key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKylmdpY+HATtBHZpGfG05KZe7T05MOt49Oj9PR612IE";
       signByDefault = true;
