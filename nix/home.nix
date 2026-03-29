@@ -13,6 +13,7 @@
 
     sessionVariables = {
       EDITOR = "nano";
+      JIRA_API_TOKEN = "op://Personal/Jira Token/credential";
     };
   };
 
@@ -60,6 +61,8 @@
 
     ignores = [
       ".claude/settings.local.json"
+      ".agent-workspace"
+      ".agent-workspace.json"
     ];
 
     signing = {
@@ -91,7 +94,6 @@
       push.autoSetupRemote = true;
     };
   };
-
   # Zsh  (.zshrc 相当)
   programs.zsh = {
     enable = true;
@@ -114,6 +116,11 @@
       "share_history"
     ];
 
+    # .zshenv
+    envExtra = ''
+      jira() { op run -- jira "$@"; }
+    '';
+
     shellAliases = {
       ls = "lsd";
       ll = "lsd -l";
@@ -129,7 +136,6 @@
       c = "code .";
       cz = "code ~/.zshrc";
       dc = "docker compose";
-      jira = "op run -- jira";
     };
 
     initContent = ''
