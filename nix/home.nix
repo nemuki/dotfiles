@@ -53,6 +53,7 @@
     pnpm_9
     zellij
     claude-code
+    tmux
   ];
 
   # Git
