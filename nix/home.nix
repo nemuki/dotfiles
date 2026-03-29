@@ -61,6 +61,7 @@
 
     ignores = [
       ".claude/settings.local.json"
+      ".agent"
       ".agent-workspace"
       ".agent-workspace.json"
     ];
