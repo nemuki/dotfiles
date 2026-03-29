@@ -81,6 +81,7 @@
         pushf = "push --force-with-lease --force-if-includes";
         swc = "switch --create";
         sw = "switch";
+        com = "commit -m";
       };
       core.autocrlf = "input";
       commit.gpgsign = true;
