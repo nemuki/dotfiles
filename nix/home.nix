@@ -51,10 +51,12 @@
     openssh
     nixfmt
     p7zip
-    pnpm_9
     zellij
     claude-code
     tmux
+    nodejs_24
+    yarn
+    pnpm_9
   ];
 
   # Git
