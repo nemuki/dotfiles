@@ -161,7 +161,8 @@
               type = "app";
               program = toString (
                 pkgs.writeShellScript "switch" ''
-                  exec sudo darwin-rebuild switch --flake "${self}#${username}" "$@"
+                  ${pkgs.nix}/bin/nix flake update claude-code-overlay
+                  exec sudo darwin-rebuild switch --flake "$PWD#${username}" "$@"
                 ''
               );
             };
