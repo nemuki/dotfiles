@@ -49,12 +49,14 @@
             folder = {
               path = "/Users/${username}/Desktop";
               showas = "fan";
+              arrangement = "date-modified";
             };
           }
           {
             folder = {
               path = "/Users/${username}/Downloads";
               showas = "fan";
+              arrangement = "date-modified";
             };
           }
         ];
