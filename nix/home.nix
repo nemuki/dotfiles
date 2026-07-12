@@ -56,7 +56,6 @@
     tmux
     nodejs_24
     yarn
-    pnpm_9
   ];
 
   # Git
@@ -245,7 +244,7 @@
     enable = true;
     enableDefaultConfig = false;
 
-    matchBlocks = {
+    settings = {
       "*" = {
         identityAgent = "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
       };
