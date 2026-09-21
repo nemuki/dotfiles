@@ -106,7 +106,6 @@
 
     onActivation = {
       autoUpdate = false;
-      cleanup = "zap"; # Brewfile 外のパッケージを削除
     };
 
     brews = [
