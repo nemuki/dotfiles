@@ -108,8 +108,13 @@
       autoUpdate = false;
     };
 
+    taps = [
+      "basi/tap"
+    ];
+
     brews = [
       "mas"
+      "docbase"
     ];
 
     casks = [
