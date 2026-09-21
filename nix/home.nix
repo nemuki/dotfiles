@@ -100,8 +100,8 @@ in
         com = "commit -m";
       };
       core.autocrlf = "input";
-      commit.gpgsign = lib.mkIf pkgs.stdenv.isDarwin true;
-      gpg = lib.mkIf pkgs.stdenv.isDarwin {
+      commit.gpgsign = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin true;
+      gpg = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
         format = "ssh";
         ssh = {
           program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
@@ -120,7 +120,7 @@ in
   };
 
   # Ubuntu の場合にzshをデフォルトシェルに設定
-  home.activation.setDefaultShell = lib.mkIf pkgs.stdenv.isLinux (
+  home.activation.setDefaultShell = lib.mkIf pkgs.stdenv.hostPlatform.isLinux (
     lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       if ! grep -qF "${pkgs.zsh}/bin/zsh" /etc/shells; then
         echo "${pkgs.zsh}/bin/zsh" | $DRY_RUN_CMD /usr/bin/sudo /usr/bin/tee -a /etc/shells > /dev/null
@@ -253,7 +253,7 @@ in
     enableZshIntegration = true;
   };
 
-  programs.ssh = lib.mkIf pkgs.stdenv.isDarwin {
+  programs.ssh = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
     enable = true;
     enableDefaultConfig = false;
 
