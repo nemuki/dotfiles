@@ -6,6 +6,17 @@
   homedir,
   ...
 }:
+let
+  gitDeleteMergedBranch = pkgs.writeShellApplication {
+    name = "git-delete-merged-branch";
+    runtimeInputs = [
+      pkgs.gh
+      pkgs.git
+      pkgs.jq
+    ];
+    text = builtins.readFile ./scripts/git-delete-merged-branch.sh;
+  };
+in
 {
   home = {
     inherit username;
@@ -45,6 +56,7 @@
     vim
     wget
     starship
+    gitDeleteMergedBranch
     libpq
     pinact
     jira-cli-go
@@ -80,7 +92,8 @@
         email = "43571743+nemuki@users.noreply.github.com";
       };
       alias = {
-        delete-marged-branch = "!f () { git branch --merged | egrep -v '\\*|develop|main|master|release' | xargs git branch -d; git fetch --prune; };f";
+        # Keep the misspelled command for backwards compatibility.
+        delete-marged-branch = "delete-merged-branch";
         pushf = "push --force-with-lease --force-if-includes";
         swc = "switch --create";
         sw = "switch";
