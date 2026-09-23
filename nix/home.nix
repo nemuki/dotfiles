@@ -37,6 +37,7 @@ in
 
   # Packages
   home.packages = with pkgs; [
+    apm
     _1password-cli
     bat
     coreutils

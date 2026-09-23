@@ -31,6 +31,7 @@
     };
 
     claude-code-overlay.url = "github:ryoppippi/claude-code-overlay";
+    llm-agents.url = "github:numtide/llm-agents.nix";
   };
 
   outputs =
@@ -46,6 +47,8 @@
     let
       username = "nem";
       homedir = "/Users/${username}";
+      llmAgentsOverlay = _final: prev:
+        inputs.llm-agents.packages.${prev.stdenv.hostPlatform.system};
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [
@@ -66,6 +69,7 @@
               nixpkgs.config.allowUnfree = true;
               nixpkgs.overlays = [
                 brew-nix.overlays.default
+                llmAgentsOverlay
                 inputs.claude-code-overlay.overlays.default
               ];
               home-manager = {
@@ -88,6 +92,7 @@
               nixpkgs.config.allowUnfree = true;
               nixpkgs.overlays = [
                 brew-nix.overlays.default
+                llmAgentsOverlay
                 inputs.claude-code-overlay.overlays.default
               ];
             }
@@ -102,6 +107,7 @@
             {
               nixpkgs.config.allowUnfree = true;
               nixpkgs.overlays = [
+                llmAgentsOverlay
                 inputs.claude-code-overlay.overlays.default
               ];
             }
@@ -116,6 +122,7 @@
             {
               nixpkgs.config.allowUnfree = true;
               nixpkgs.overlays = [
+                llmAgentsOverlay
                 inputs.claude-code-overlay.overlays.default
               ];
             }];
