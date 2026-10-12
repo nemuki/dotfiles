@@ -7,6 +7,23 @@
   ...
 }:
 let
+  # 初期化コードはパッケージ更新時に生成し直し、起動時のプロセス生成を減らす。
+  zshIntegrations = pkgs.runCommand "zsh-integrations" { } ''
+    mkdir -p "$out"
+    ${lib.getExe config.programs.starship.package} init zsh --print-full-init > "$out/starship.zsh"
+    ${lib.getExe config.programs.fzf.package} --zsh > "$out/fzf.zsh"
+    for script in "$out"/*.zsh; do
+      ${lib.getExe pkgs.zsh} -f -c 'zcompile -R -- "$1"' -- "$script"
+    done
+  '';
+  zshStartup = pkgs.runCommand "zsh-startup" {
+    startup = config.programs.zsh.initContent;
+    passAsFile = [ "startup" ];
+  } ''
+    mkdir -p "$out"
+    cp "$startupPath" "$out/init.zsh"
+    ${lib.getExe pkgs.zsh} -f -c 'zcompile -R -- "$1"' -- "$out/init.zsh"
+  '';
   gitDeleteMergedBranch = pkgs.writeShellApplication {
     name = "git-delete-merged-branch";
     runtimeInputs = [
@@ -133,10 +150,24 @@ in
   );
 
   # Zsh  (.zshrc 相当)
+  # 同じ derivation 内の設定と .zwc を使い、更新時の不整合を防ぐ。
+  home.file.".config/zsh/.zshrc".text = lib.mkForce ''
+    source ${zshStartup}/init.zsh
+  '';
+
   programs.zsh = {
     enable = true;
     dotDir = "${config.xdg.configHome}/zsh";
     enableCompletion = true;
+    completionInit = ''
+      autoload -Uz compinit
+      compinit
+      # 安全性・補完ファイル数の確認は維持し、dump の解析のみ省略する。
+      if [[ -f $_comp_dumpfile && (! -f $_comp_dumpfile.zwc || $_comp_dumpfile -nt $_comp_dumpfile.zwc) ]]; then
+        zcompile -R -- "$_comp_dumpfile.$$.zwc" "$_comp_dumpfile" &&
+          mv -f -- "$_comp_dumpfile.$$.zwc" "$_comp_dumpfile.zwc"
+      fi
+    '';
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
 
@@ -177,6 +208,13 @@ in
     };
 
     initContent = ''
+      if [[ $options[zle] = on ]]; then
+        source ${zshIntegrations}/fzf.zsh
+      fi
+      if [[ $TERM != dumb ]]; then
+        source ${zshIntegrations}/starship.zsh
+      fi
+
       # 補完の選択を楽にする
       zstyle ':completion:*' menu select
 
@@ -220,6 +258,7 @@ in
   # Starship
   programs.starship = {
     enable = true;
+    enableZshIntegration = false;
     settings = {
       directory = {
         truncation_length = 100;
@@ -251,7 +290,7 @@ in
   # fzf
   programs.fzf = {
     enable = true;
-    enableZshIntegration = true;
+    enableZshIntegration = false;
   };
 
   programs.ssh = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
