@@ -1,5 +1,6 @@
 # https://nix-darwin.github.io/nix-darwin/manual/index.html
 {
+  lib,
   pkgs,
   username,
   homedir,
@@ -100,6 +101,9 @@
     git
   ];
 
+  # Homebrew の formula を Nix のパッケージより後ろで PATH に通す
+  environment.systemPath = lib.mkAfter [ "/opt/homebrew/bin" ];
+
   # Homebrew (casks / macOS-specific formulas)
   homebrew = {
     enable = true;
@@ -114,7 +118,8 @@
 
     brews = [
       "mas"
-      "docbase"
+      # 非公式 tap の formula は完全修飾名で指定しないと信頼されず読み込まれない
+      "basi/tap/docbase"
     ];
 
     casks = [
@@ -137,7 +142,7 @@
       "Microsoft Excel" = 462058435;
       "Slack" = 803453959;
       "The Unarchiver" = 425424353;
-      "RunCat" = 1429033973;
+      "RunCat Neo" = 6757801838;
     };
   };
 }
