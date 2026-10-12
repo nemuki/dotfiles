@@ -188,6 +188,17 @@ in
     # .zshenv
     envExtra = ''
       jira() { op run -- jira "$@"; }
+      # docbase は環境変数からトークンを読めないため、op read した値を --token で渡す
+      docbase() {
+        # config set は --token の値まで config.json に書き戻すため、op を通さない
+        if [[ $1 == config ]]; then
+          command docbase "$@"
+          return
+        fi
+        local token
+        token="$(op read 'op://Personal/DocBase coco Token/credential')" || return
+        command docbase --token "$token" "$@"
+      }
     '';
 
     shellAliases = {
